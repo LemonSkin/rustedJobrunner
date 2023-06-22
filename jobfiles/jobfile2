@@ -1,0 +1,3 @@
+# run cat, take stdin from /etc/fstab, send stdout to out.txt, no timeout, no args
+# this is equivalent to the shell command "cat < /etc/fstab > out.txt"
+cat,/etc/fstab,out.txt

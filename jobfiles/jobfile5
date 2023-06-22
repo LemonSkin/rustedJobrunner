@@ -1,0 +1,4 @@
+# run ls, pipe its input into sort, redirect that to ls.out. No timeouts
+# this is equivalent to the shell command "ls | sort > ls.out"
+ls,-,@pipe1,0
+sort,@pipe1,ls.out,0

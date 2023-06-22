@@ -1,0 +1,5 @@
+# run ls, pipe its output into cat, pipe that to sort, redirect that to ls.out. No timeouts
+# this is equivalent to the shell command "ls | /usr/bin/cat | sort > ls.out"
+ls,-,@alice
+sort,@bob,ls.out,
+/usr/bin/cat,@alice,@bob,0

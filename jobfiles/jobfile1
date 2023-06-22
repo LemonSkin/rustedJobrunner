@@ -1,0 +1,3 @@
+# Spawn a process to run ls, stdin and stdout shared with jobrunner, no timeout, no args
+# This is equivalent to the shell command "ls"
+ls,-,-,0

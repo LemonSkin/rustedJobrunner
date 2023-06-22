@@ -1,0 +1,11 @@
+# Job 1 - this program blocks SIGABRT and sleeps. jobrunner should end up sending it SIGKILL
+sigabort_blocker,-,-,5
+# Job 2 - there is no such program - exec() should fail and the child exit(255)
+nosuchprogram,-,-
+# Jobs 3 and 4 should run and complete very quickly
+cat,/etc/mtab,out.txt
+cat,/etc/fstab,fstab.txt
+# Job 5 will sleep for 10 seconds
+sleep,-,-,,10
+# Job 6 will sleep for 10 seconds but has a 5 second timeout - should terminate with SIGABRT
+sleep,-,-,5,10

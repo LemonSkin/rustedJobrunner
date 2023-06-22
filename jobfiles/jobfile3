@@ -1,0 +1,3 @@
+# run cat, share stdin with jobrunner, send stdout to out.txt, no timeout, one argument
+# this is equivalent to the shell command "cat /etc/mtab > out.txt"
+cat,-,out.out,,/etc/mtab
