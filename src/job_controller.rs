@@ -17,16 +17,16 @@ pub fn run_jobs(config: crate::config::Config) {
     // I want ls | cat > ls.txt
     // cat,@pipe1,ls.txt,
     // ls,-,@pipe1,
-    let mut cat_process = process::Command::new("cat");
-    cat_process.stdout(
-        fs::OpenOptions::new()
-            .write(true)
-            .truncate(true)
-            .open("ls.out")
-            .unwrap(),
-    );
-    let mut ls_process = process::Command::new("ls");
-    ls_process.stdout(process::Stdio::piped());
+    // let mut cat_process = process::Command::new("cat");
+    // cat_process.stdout(
+    //     fs::OpenOptions::new()
+    //         .write(true)
+    //         .truncate(true)
+    //         .open("ls.out")
+    //         .unwrap(),
+    // );
+    // let mut ls_process = process::Command::new("ls");
+    // ls_process.stdout(process::Stdio::piped());
 
     // let mut meme = process::Command::new("ls")
     //     .stdout(process::Stdio::piped())
