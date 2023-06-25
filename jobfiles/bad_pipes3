@@ -1,0 +1,4 @@
+cat,meme,@pipe1,0
+ls,@pipe1,@pipe2,0
+nang,@pipe2,zing.out,0
+ls,-,-,0

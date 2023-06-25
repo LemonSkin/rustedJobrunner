@@ -1,0 +1,4 @@
+# run ls, pipe its output to... where? This is a broken jobspec and must be ignored
+ls,-,@pipe1,0
+# This part of the jobfile is valid and must still be executed (cat < /etc/mtab > cat.out)
+cat,/etc/mtab,cat.out,0

@@ -1,4 +1,4 @@
 # create two jobs, one sleeping for 10 seconds and the other
 # running "ls" and directing output to ls.out
 ls,-,ls.out,
-sleep,-,-,0,2
+sleep,-,-,0,10

@@ -1,27 +1,23 @@
+// use jobrunner;
 use crate::error_handler;
-use crate::jobfile_parser::parse_jobfile;
+use std::env;
+// use crate::jobfile_parser::parse_jobfile;
 
+mod jobfile_parser;
+use jobfile_parser::parse_jobfile;
+
+#[derive(Debug)]
 pub struct Config {
     pub verbose: bool,
-    pub jobs: Vec<Job>,
-}
-
-#[derive(Default)]
-pub struct Job {
-    pub program: String,
-    pub stdin: String,
-    pub stdout: String,
-    pub timeout: u16,
-    pub args: Vec<String>,
+    pub jobs: Vec<crate::Job>,
+    pub runnable_jobs: usize,
 }
 
 impl Config {
-    pub fn build(
-        args: impl Iterator<Item = String>,
-    ) -> Result<Config, error_handler::JobrunnerError> {
-        let input: Vec<String> = args.skip(1).collect();
+    pub fn build(args: Vec<String>) -> Result<Config, error_handler::JobrunnerError> {
+        // let args: Vec<String> = args.skip(1).collect();
 
-        if input.is_empty() {
+        if args.is_empty() {
             return Err(error_handler::JobrunnerError {
                 error_code: 1,
                 ..Default::default()
@@ -31,9 +27,10 @@ impl Config {
         let mut config: Config = Config {
             verbose: false,
             jobs: Vec::new(),
+            runnable_jobs: 0,
         };
 
-        for (index, arg) in input.iter().enumerate() {
+        for (index, arg) in args.iter().enumerate() {
             if arg == "-v" {
                 match index {
                     0 => config.verbose = true,
@@ -49,6 +46,27 @@ impl Config {
             }
         }
 
+        if config.jobs.is_empty() {
+            return Err(error_handler::JobrunnerError {
+                error_code: 4,
+                ..Default::default()
+            });
+        }
+
         Ok(config)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn build_config() {
+        let Ok(_config) = Config::build(vec!("jobfiles/jobfile1".to_string())) else {
+            return assert!(false);
+        };
+        let Ok(_config) = Config::build(vec!("jobfiles/invalid_jobfile1".to_string())) else {
+            return assert!(true);
+        };
     }
 }

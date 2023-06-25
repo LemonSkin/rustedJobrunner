@@ -1,0 +1,3 @@
+# Sleep for 10 seconds, but with a 5 second timeout.
+# This process should receive SIGABRT from jobrunner
+sleep,-,-,5,10

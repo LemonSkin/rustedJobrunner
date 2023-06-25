@@ -1,20 +1,22 @@
 use std::env;
 
-mod config;
-mod error_handler;
-mod jobfile_parser;
-
-use error_handler::handle;
+use jobrunner::config;
+use jobrunner::error_handler::handle;
+use jobrunner::job_checker::check_jobs;
+use jobrunner::job_controller::run_jobs;
 
 fn main() {
-    let config = match config::Config::build(env::args()) {
+    let args: Vec<String> = env::args().skip(1).collect();
+
+    let mut config = match config::Config::build(args) {
         Ok(config) => config,
         Err(e) => return handle(e),
     };
 
-    // handle(error_handler::JobrunnerError {
-    //     error_code: 1,
-    //     file_name: None,
-    //     line_num: None,
-    // });
+    match check_jobs(&mut config) {
+        Ok(_) => (),
+        Err(e) => handle(e),
+    };
+
+    run_jobs(config);
 }

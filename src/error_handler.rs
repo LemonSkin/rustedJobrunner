@@ -4,7 +4,7 @@ use std::process;
 pub struct JobrunnerError {
     pub error_code: i32,
     pub text: Option<String>,
-    pub line_num: Option<u16>,
+    pub line_num: Option<usize>,
 }
 
 pub fn handle(error: JobrunnerError) {

@@ -1,0 +1,5 @@
+ls,-,-,0
+ls,-,@pipe1,0
+cat,@pipe1,ls.out,0
+meme,@pipe2,ls.out,0
+sort,-,ls.out,0

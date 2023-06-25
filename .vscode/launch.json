@@ -1,0 +1,64 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in library 'jobrunner'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--lib",
+                    "--package=jobrunner"
+                ],
+                "filter": {
+                    "name": "jobrunner",
+                    "kind": "lib"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'jobrunner'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=jobrunner",
+                    "--package=jobrunner"
+                ],
+                "filter": {
+                    "name": "jobrunner",
+                    "kind": "bin"
+                }
+            },
+            "args": ["-v", "jobfiles/bad_pipes3"],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'jobrunner'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=jobrunner",
+                    "--package=jobrunner"
+                ],
+                "filter": {
+                    "name": "jobrunner",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
