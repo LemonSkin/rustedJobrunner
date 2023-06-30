@@ -1,7 +1,4 @@
-// use jobrunner;
 use crate::error_handler;
-use std::env;
-// use crate::jobfile_parser::parse_jobfile;
 
 mod jobfile_parser;
 use jobfile_parser::parse_jobfile;
@@ -15,8 +12,6 @@ pub struct Config {
 
 impl Config {
     pub fn build(args: Vec<String>) -> Result<Config, error_handler::JobrunnerError> {
-        // let args: Vec<String> = args.skip(1).collect();
-
         if args.is_empty() {
             return Err(error_handler::JobrunnerError {
                 error_code: 1,

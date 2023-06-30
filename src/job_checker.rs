@@ -23,7 +23,6 @@ pub fn check_jobs(
         });
     }
 
-    // Print jobs in verbose mode
     if config.verbose {
         print_runnable_jobs(&config);
     }
@@ -34,44 +33,38 @@ pub fn check_jobs(
 fn check_file_io(config: &mut crate::config::Config) {
     for (index, job) in config.jobs.iter_mut().enumerate() {
         // Attempt to open for stdin
-        if !job.stdin.starts_with('@') {
-            // input_pipes.push("".to_string());
-            if job.stdin != "-" {
-                match OpenOptions::new()
-                    .read(true)
-                    .write(false)
-                    .create(false)
-                    .open(&job.stdin)
-                {
-                    Ok(_) => (),
-                    Err(_) => {
-                        eprintln!("Unable to open \"{}\" for reading", job.stdin);
-                        job.runnable = false;
-                        continue;
-                    }
-                };
-            }
+        if !job.stdin.starts_with('@') && job.stdin != "-" {
+            match OpenOptions::new()
+                .read(true)
+                .write(false)
+                .create(false)
+                .open(&job.stdin)
+            {
+                Ok(_) => (),
+                Err(_) => {
+                    eprintln!("Unable to open \"{}\" for reading", job.stdin);
+                    job.runnable = false;
+                    continue;
+                }
+            };
         }
 
-        // Attempt to open for stdout
-        if !job.stdout.starts_with('@') {
-            // output_pipes.push("".to_string());
-            if job.stdout != "-" {
-                match OpenOptions::new()
-                    .read(false)
-                    .write(true)
-                    .create(true)
-                    .truncate(true)
-                    .open(&job.stdout)
-                {
-                    Ok(_) => (),
-                    Err(_) => {
-                        eprintln!("Unable to open \"{}\" for writing", job.stdout);
-                        job.runnable = false;
-                        continue;
-                    }
-                };
-            }
+        // Attempt to open for stdout - will also create the file for later
+        if !job.stdout.starts_with('@') && job.stdout != "-" {
+            match OpenOptions::new()
+                .read(false)
+                .write(true)
+                .create(true)
+                .truncate(true)
+                .open(&job.stdout)
+            {
+                Ok(_) => (),
+                Err(_) => {
+                    eprintln!("Unable to open \"{}\" for writing", job.stdout);
+                    job.runnable = false;
+                    continue;
+                }
+            };
         }
     }
 }
@@ -93,7 +86,7 @@ fn check_pipes(config: &mut crate::config::Config) {
                 // Since key exists, it is a duplicated pipe and needs to be disabled
                 job.runnable = false;
                 eprintln!("Invalid pipe usage \"{}\"", job.stdin);
-                // Disable the other job with a duplicated pipe
+                // Need to also disable other jobs that use this pipe - processed later
                 jobs_to_disable.push(*in_pipes_hash.get(&job.stdin).unwrap());
             }
         }
@@ -104,12 +97,12 @@ fn check_pipes(config: &mut crate::config::Config) {
                 // Since key exists, it is a duplicated pipe and needs to be disabled
                 job.runnable = false;
                 eprintln!("Invalid pipe usage \"{}\"", job.stdout);
-                // Disable the other job with a duplicated pipe
+                // Need to also disable other jobs that use this pipe - processed later
                 jobs_to_disable.push(*out_pipes_hash.get(&job.stdout).unwrap());
             }
         }
     }
-    // Disable jobs with duplicate pipes
+    // Disable jobs with duplicated pipes
     for index in jobs_to_disable {
         config.jobs[index].runnable = false;
     }
@@ -123,12 +116,10 @@ fn check_pipes(config: &mut crate::config::Config) {
         }
 
         if job.stdin.starts_with('@') {
-            // println!("In pipe: {}", job.stdin);
             input_pipes.push((job.stdin.to_string(), index));
         }
 
         if job.stdout.starts_with('@') {
-            // println!("Out pipe: {}", job.stdout);
             output_pipes.push((job.stdout.to_string(), index));
         }
     }

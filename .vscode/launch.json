@@ -38,7 +38,7 @@
                     "kind": "bin"
                 }
             },
-            "args": ["-v", "jobfiles/bad_pipes3"],
+            "args": ["-v", "jobfiles/big_job"],
             "cwd": "${workspaceFolder}"
         },
         {

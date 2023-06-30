@@ -39,8 +39,6 @@ pub fn parse_jobfile(file_path: &str) -> Result<Vec<crate::Job>, error_handler::
             jobs.push(job);
         }
     }
-
-    // println!("{:?}", jobs);
     Ok(jobs)
 }
 
