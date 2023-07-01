@@ -70,16 +70,16 @@ fn generate_processes(mut config: crate::config::Config) -> Vec<ProcessData> {
                 //    output pipe has been created and skip until later if not
                 if job.stdin.starts_with('@') {
                     // Ensure there are active output pipes
-                    if outpipes_remaining > 0 {
-                        match pipe_map.get(&job.stdin) {
-                            Some(_) => (),
-                            None => continue,
+                    match pipe_map.get(&job.stdin) {
+                        Some(_) => (),
+                        None => {
+                            if outpipes_remaining == 0 {
+                                eprintln!("Job {} failed: Broken pipe dependency", index + 1);
+                                job.runnable = false;
+                                config.runnable_jobs -= 1;
+                            }
+                            continue;
                         }
-                    } else {
-                        eprintln!("Job {} failed: Broken pipe dependency", index + 1);
-                        job.runnable = false;
-                        config.runnable_jobs -= 1;
-                        continue;
                     }
                 }
 
